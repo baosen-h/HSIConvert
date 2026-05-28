@@ -167,19 +167,23 @@ python FUNCTION/mat2h5.py DATA/INPUT/hsi.mat --key data -o DATA/OUTPUT/hsi.h5
 If the `.mat` file has multiple variables, use `--key` to choose which variable
 to convert.
 
-Reorder axes when needed:
+The output dataset name is `hyperspectral` by default, matching `envi2h5.py`.
 
-```bash
-python FUNCTION/mat2h5.py DATA/INPUT/hsi.mat --key data --axes 2 0 1 -o DATA/OUTPUT/hsi.h5
-```
-
-Example:
+Reorder axes when needed so the H5 shape is:
 
 ```text
-H x W x C -> C x H x W
+lines x samples x bands
 ```
 
-This is useful when preparing data for deep learning frameworks.
+For example, convert `bands x lines x samples` to `lines x samples x bands`:
+
+```bash
+python FUNCTION/mat2h5.py DATA/INPUT/hsi.mat --key data --axes 1 2 0 -o DATA/OUTPUT/hsi.h5
+```
+
+This creates a clean HDF5 file that ENVI can open as a generic HDF5 raster
+dataset. Choose the correct RGB bands in ENVI when displaying it.
+
 
 ## Python API
 
@@ -192,8 +196,8 @@ from FUNCTION.mat2h5 import convert_mat_to_h5
 
 convert_envi_to_mat(
     "DATA/INPUT/hsi.hdr",
-    "DATA/INPUT/hsi.dat",
     "DATA/OUTPUT/hsi.mat",
+    data_path="DATA/INPUT/hsi.dat",
 )
 
 convert_envi_to_h5(
