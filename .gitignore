@@ -12,3 +12,7 @@ env/
 *.sta
 *.tif
 *.tiff
+DATA/INPUT/*
+DATA/OUTPUT/*
+!DATA/INPUT/.gitkeep
+!DATA/OUTPUT/.gitkeep
